@@ -69,7 +69,7 @@ curso-docker-pentatech/
 ## 📑 Material de apoyo
 
 - [Slides del curso (PDF)](./slides/Curso-Docker.pdf)  
-- [Cheat sheet de comandos Docker](./cheatsheet-docker.pdf)
+- [Cheat sheet de comandos Docker](./cheatsheet-docker.md)
 
 ---
 
