@@ -1,7 +1,16 @@
 # 🐳 Docker Cheatsheet - Pentatech
 
 ## 📋 Comandos Básicos
-
+```
+                    ##        .            
+              ## ## ##       ==            
+           ## ## ## ##      ===            
+       /""""""""""""""""\___/ ===        
+  ~~~ {~~ ~~~~ ~~~ ~~~~ ~~ ~ /  ===- ~~~   
+       \______ o          __/            
+         \    \        __/             
+          \____\______/ 
+```
 ### Información del sistema
 ```bash
 docker --version              # Verificar versión de Docker
