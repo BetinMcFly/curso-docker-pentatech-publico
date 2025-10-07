@@ -38,12 +38,62 @@ Soluciona el clásico: *“funciona en mi máquina, pero no en la tuya”*.
 | Inicio      | Segundos a minutos | 1–3 segundos         |
 | Aislamiento | Completo           | A nivel de proceso   |
 
+**¿Cuándo usar Docker vs Máquinas Virtuales?**
+
+### 🐳 **Usar Docker cuando:**
+- **Desarrollo moderno** - Microservicios, APIs, web apps
+- **DevOps/CI/CD** - Automatización de despliegues
+- **Aplicaciones cloud-native** - Kubernetes, cloud platforms
+- **Equipos ágiles** - Desarrollo rápido y colaborativo
+- **Aplicaciones Linux** - Backend, servicios, APIs
+- **Escalabilidad** - Necesitas escalar rápidamente
+- **Presupuesto limitado** - Menos recursos de hardware
+
+### 🖥️ **Usar VMs cuando:**
+- **Aplicaciones legacy** - Sistemas antiguos no containerizables
+- **Múltiples OS** - Necesitas Windows, Linux, macOS
+- **Seguridad crítica** - Aislamiento total requerido
+- **Compliance estricto** - Regulaciones que requieren VMs
+- **Aplicaciones monolíticas** - Sistemas grandes y complejos
+- **Equipos tradicionales** - Menos experiencia con containers
+- **Hardware dedicado** - Recursos abundantes disponibles
+
+### 📊 **Comparación detallada:**
+
+| Aspecto | Docker | Máquinas Virtuales |
+|---------|--------|-------------------|
+| **Inicio** | 2-5 segundos | 2-5 minutos |
+| **RAM** | 10-50 MB | 512 MB - 2 GB |
+| **Aislamiento** | Proceso | Sistema completo |
+| **OS** | Solo Linux | Cualquier OS |
+| **Seguridad** | Buena | Excelente |
+| **Portabilidad** | Excelente | Buena |
+| **Escalabilidad** | Fácil | Compleja |
+| **Costo** | Bajo | Alto |
+
 **¿Cuánto se ahorra en recursos?**
 Un contenedor puede ser **5–10× más eficiente** que una VM:
 
 * CPU overhead: <2 %
 * RAM: cientos de MB
 * Arranque: segundos
+
+**💡 Recomendación:**
+> **"Docker para el 80% de los casos modernos, VMs para el 20% de casos específicos"**
+
+**¿Puedo usar Docker y VMs juntos?**
+¡Absolutamente! Muchas empresas usan un enfoque híbrido:
+
+- **Desarrollo** - Docker para apps, VMs para servicios legacy
+- **Testing** - Docker para tests rápidos, VMs para tests de integración
+- **Producción** - Docker para microservicios, VMs para bases de datos críticas
+- **Seguridad** - Docker para apps, VMs para sistemas de seguridad
+
+**¿Cuál es la tendencia del mercado?**
+- **Docker está ganando** por cloud-first, microservicios, DevOps
+- **VMs siguen siendo necesarias** para legacy, compliance, seguridad
+- **Kubernetes** está impulsando la adopción de contenedores
+- **Costos** - Docker es más eficiente en recursos
 
 ---
 
