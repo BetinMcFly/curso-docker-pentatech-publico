@@ -1,7 +1,3 @@
-Perfecto — aquí tienes la versión **definitiva y optimizada para GitHub** de tu archivo
-`FAQ.md` con **estilo visual profesional**, encabezados con color, emojis, formato compatible con modo oscuro, y una estructura lista para publicar sin edición adicional.
-
-Cópiala tal cual dentro del archivo `curso-docker-pentatech/FAQ.md`.
 
 ---
 
