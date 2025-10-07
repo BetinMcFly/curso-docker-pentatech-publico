@@ -17,6 +17,8 @@ docker --version              # Verificar versión de Docker
 docker info                   # Información detallada del sistema
 docker system df              # Espacio usado por Docker
 docker system prune           # Limpiar recursos no utilizados
+docker system info            # Información detallada del sistema
+docker version                # Versión de Docker y API
 ```
 
 ### Ayuda y documentación
@@ -68,6 +70,15 @@ docker start <container_id>
 # Reiniciar contenedor
 docker restart <container_id>
 
+# Pausar contenedor
+docker pause <container_id>
+
+# Reanudar contenedor pausado
+docker unpause <container_id>
+
+# Renombrar contenedor
+docker rename old-name new-name
+
 # Eliminar contenedor
 docker rm <container_id>
 
@@ -89,11 +100,20 @@ docker logs <container_id>
 # Seguir logs en tiempo real
 docker logs -f <container_id>
 
+# Ver logs con timestamp
+docker logs -t <container_id>
+
+# Ver últimas N líneas de logs
+docker logs --tail 50 <container_id>
+
 # Inspeccionar contenedor
 docker inspect <container_id>
 
 # Ver procesos en el contenedor
 docker top <container_id>
+
+# Ver puertos del contenedor
+docker port <container_id>
 ```
 
 ---
@@ -105,8 +125,14 @@ docker top <container_id>
 # Listar imágenes locales
 docker images
 
+# Buscar imágenes en Docker Hub
+docker search nginx
+
 # Descargar imagen
 docker pull nginx
+
+# Etiquetar imagen
+docker tag nginx:latest mi-nginx:v1.0
 
 # Eliminar imagen
 docker rmi <image_id>
@@ -128,6 +154,12 @@ docker build -t mi-app:v1.0 .
 
 # Construir con contexto específico
 docker build -f Dockerfile.prod -t mi-app:prod .
+
+# Guardar imagen como archivo
+docker save -o imagen.tar nginx:latest
+
+# Cargar imagen desde archivo
+docker load -i imagen.tar
 ```
 
 ### Inspeccionar imágenes
@@ -191,6 +223,9 @@ docker network create mi-red
 # Inspeccionar red
 docker inspect mi-red
 
+# Ver detalles de red
+docker network inspect mi-red
+
 # Eliminar red
 docker network rm mi-red
 
@@ -249,6 +284,15 @@ docker-compose build --no-cache
 # Ejecutar comando en servicio
 docker-compose exec nginx bash
 
+# Ejecutar comando en servicio nuevo
+docker-compose run nginx bash
+
+# Pausar servicios
+docker-compose pause
+
+# Reanudar servicios
+docker-compose unpause
+
 # Escalar servicio
 docker-compose up --scale nginx=3
 
@@ -286,11 +330,17 @@ docker network prune
 # Ver eventos del sistema
 docker events
 
+# Ver eventos en tiempo real
+docker events --filter container=mi-nginx
+
 # Ver estadísticas de contenedor
 docker stats <container_id>
 
 # Ver estadísticas de todos los contenedores
 docker stats
+
+# Ver estadísticas sin streaming
+docker stats --no-stream
 
 # Copiar archivos entre host y contenedor
 docker cp archivo.txt <container_id>:/ruta/destino
@@ -330,8 +380,20 @@ docker run --user 1000:1000 nginx
 # Ejecutar en modo read-only
 docker run --read-only nginx
 
+# Ejecutar con capabilities específicas
+docker run --cap-add=NET_ADMIN nginx
+
+# Ejecutar con ulimits
+docker run --ulimit nofile=1024:1024 nginx
+
+# Ejecutar con security options
+docker run --security-opt seccomp=unconfined nginx
+
 # Limitar recursos
 docker run --memory=512m --cpus=1 nginx
+
+# Limitar memoria y CPU específicos
+docker run --memory=1g --cpus=2 nginx
 ```
 
 ---
