@@ -358,6 +358,59 @@ docker run -e VAR1=valor1 -e VAR2=valor2 nginx
 
 ---
 
+## 🐳 Docker Hub
+
+### Autenticación
+```bash
+# Iniciar sesión en Docker Hub
+docker login
+
+# Iniciar sesión con usuario específico
+docker login -u mi-usuario
+
+# Cerrar sesión
+docker logout
+```
+
+### Publicar imágenes
+```bash
+# Etiquetar imagen para Docker Hub
+docker tag mi-app:latest mi-usuario/mi-app:latest
+
+# Subir imagen a Docker Hub
+docker push mi-usuario/mi-app:latest
+
+# Subir con múltiples tags
+docker push mi-usuario/mi-app:v1.0
+docker push mi-usuario/mi-app:latest
+```
+
+### Gestionar repositorios
+```bash
+# Buscar imágenes en Docker Hub
+docker search nginx
+
+# Descargar imagen desde Docker Hub
+docker pull mi-usuario/mi-app:latest
+
+# Ver información de imagen remota
+docker inspect mi-usuario/mi-app:latest
+```
+
+### Comandos útiles
+```bash
+# Ver imágenes con repositorio
+docker images --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
+
+# Etiquetar imagen existente
+docker tag nginx:latest mi-usuario/nginx:mi-version
+
+# Subir todas las versiones
+docker push mi-usuario/mi-app --all-tags
+```
+
+---
+
 ## 🚀 Comandos para Producción
 
 ### Optimización
@@ -428,6 +481,22 @@ docker-compose restart nginx
 
 # Ejecutar comando en servicio
 docker-compose exec mysql mysql -u root -p
+```
+
+### Publicar en Docker Hub (Curso)
+```bash
+# 1. Crear cuenta en hub.docker.com
+# 2. Iniciar sesión
+docker login
+
+# 3. Etiquetar tu imagen
+docker tag mi-app:latest tu-usuario/mi-app:latest
+
+# 4. Subir a Docker Hub
+docker push tu-usuario/mi-app:latest
+
+# 5. Verificar en Docker Hub
+# Ve a hub.docker.com y busca tu imagen
 ```
 
 ---
