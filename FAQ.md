@@ -205,35 +205,5 @@ O consúltalo en vivo durante las sesiones del curso.
 
 ---
 
-# 🏁 Fin del documento
 
----
 
-## ✅ Integración con tu repositorio
-
-1. Crea el archivo:
-
-   ```
-   curso-docker-pentatech/FAQ.md
-   ```
-
-2. Pega el contenido anterior.
-
-3. Edita tu `README.md` y añade al final:
-
-   ```md
-   ---
-   ## ❓ Preguntas Frecuentes
-   Consulta las dudas más comunes en el curso:
-   👉 [Ver FAQ completo](./FAQ.md)
-   ```
-
-4. Haz commit y push:
-
-   ```bash
-   git add FAQ.md README.md
-   git commit -m "Añadir FAQ visual y profesional para el curso Docker Pentatech"
-   git push origin main
-   ```
-
----
