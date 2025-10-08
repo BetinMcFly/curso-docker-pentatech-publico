@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_PASSWORD: secret
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@pentatech.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8084:80"
+    depends_on:
+      - db
+
+volumes:
+  pgdata:
