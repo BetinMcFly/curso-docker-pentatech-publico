@@ -1,95 +1,90 @@
-# 📦 Volumen persistente con Nginx
+# 📦 Volumen persistente con Nginx (Bind Mount)
 
-## 🎯 1) Objetivo
+Este laboratorio demuestra cómo mantener archivos **persistentes** entre contenedores usando un **bind mount**, es decir, una carpeta del host compartida con el contenedor.
 
-Demostrar cómo conservar archivos web aunque el contenedor se detenga o elimine, usando:
+El objetivo es entender que **el contenedor es efímero**, pero **los datos pueden vivir fuera de él**.
 
-- **Volumen bind mount** (directorio del host)
-- **Volumen nombrado** gestionado por Docker
+---
 
-## 📚 2) Fundamento teórico
+## 🎯 Objetivos
 
-Un contenedor es **efímero**: si lo borras, su sistema de archivos desaparece.
-Un volumen desacopla los datos del ciclo de vida del contenedor:
+- Comprender la diferencia entre **bind mounts** y **volúmenes Docker**
+- Aprender a compartir una carpeta local con el contenedor
+- Validar que los cambios en el host se reflejan dentro del contenedor en tiempo real
 
-- **Bind mount**: mapeas una carpeta del host dentro del contenedor
-- **Volumen nombrado**: Docker administra la ubicación y el ciclo de vida del almacenamiento
+---
 
-**Ambos sobreviven a la eliminación del contenedor.**
+## 🧠 Fundamento teórico
 
-## ✅ 3) Requisitos previos
+| Tipo de almacenamiento | Administrado por | Persistencia | Caso de uso |
+|-------------------------|------------------|---------------|--------------|
+| **Bind mount** | El usuario (carpeta del host) | Mientras exista la carpeta local | Desarrollo local, pruebas rápidas |
+| **Docker volume** | Docker Engine | Persiste hasta que se elimina explícitamente | Producción, bases de datos |
 
-- **Docker Desktop** o **Docker Engine** funcionando:
-  ```bash
-  docker version
-  docker info | head -n 20
-  ```
-- **Puertos libres**: 8081, 8082
-- **Editor de texto** (VS Code)
+> **💡 Concepto clave:** Un bind mount **monta una carpeta local directamente dentro del contenedor**.  
+> Los archivos del host son accesibles y modificables desde el contenedor, sin reconstruir la imagen.
 
-## 📁 4) Insumos y materiales
+---
 
-### Estructura de esta carpeta:
+## 📁 Estructura del ejemplo
+
 ```
-02-volumen-persistente-nginx/
+01-volumen-bindmount-nginx/
 ├── Dockerfile
 ├── index.html
 └── README.md
 ```
 
-### Archivos:
+---
 
-#### **Dockerfile**
+## 🧰 Archivos principales
+
+### **Dockerfile**
 ```dockerfile
 FROM nginx:alpine
 COPY index.html /usr/share/nginx/html/index.html
 ```
 
-#### **index.html**
+### **index.html**
 ```html
-<!doctype html>
-<html lang="es">
-<head>
-  <meta charset="utf-8" />
-  <title>Persistencia con Volúmenes</title>
-</head>
-<body>
-  <h1>Persistencia con volúmenes</h1>
-  <p>Este archivo fue empaquetado en la imagen.</p>
-</body>
-</html>
+<h1>Docker Bind Mount</h1>
+<p>Este contenido proviene de la imagen base.</p>
 ```
 
-### Opcional (verificación del archivo):
-```bash
-# macOS/Linux
-shasum -a 256 index.html
-# Windows PowerShell
-Get-FileHash index.html -Algorithm SHA256
-```
+---
 
-## 🚀 5) Pasos numerados (CLI)
+## ⚙️ Pasos del laboratorio
 
 ### **A. Construir la imagen base**
 
-**Dónde**: terminal en tu máquina, dentro de esta carpeta.
+**Dónde:** terminal, dentro de esta carpeta.
 
 ```bash
 docker build -t penta-nginx:1.0 .
 ```
 
-### **B. Escenario 1: Bind mount (carpeta del host)**
+**Verifica:**
+```bash
+docker images | grep penta-nginx
+```
 
-**Crear una carpeta local para servir contenido:**
+**Deberías ver:**
+```
+penta-nginx   1.0   <IMAGE_ID>   <date>   15MB
+```
+
+### **B. Crear carpeta local para el contenido**
 
 ```bash
 mkdir -p html
 echo "<h1>Contenido del host</h1>" > html/index.html
 ```
 
-**Ejecutar Nginx montando la carpeta:**
+> Esta carpeta `html` será el directorio compartido entre el host y el contenedor.
 
-**macOS/Linux:**
+### **C. Ejecutar el contenedor con bind mount**
+
+**macOS / Linux:**
 ```bash
 docker run -d --name web-bind -p 8081:80 \
   -v "$(pwd)/html:/usr/share/nginx/html" \
@@ -99,110 +94,87 @@ docker run -d --name web-bind -p 8081:80 \
 **Windows PowerShell:**
 ```powershell
 docker run -d --name web-bind -p 8081:80 `
-  -v "${PWD}\html:/usr/share/nginx/html" `
+  -v ${PWD}\html:/usr/share/nginx/html `
   penta-nginx:1.0
 ```
 
-### **C. Escenario 2: Volumen nombrado (gestionado por Docker)**
+### **D. Validar**
 
-**Crear el volumen:**
-```bash
-docker volume create datos_web
+**Abre en tu navegador:**
+👉 http://localhost:8081
+
+**Deberías ver:**
+```
+Contenido del host
 ```
 
-**Iniciar un contenedor usando ese volumen:**
+### **E. Modificar contenido sin reiniciar**
+
+**Edita el archivo del host:**
 ```bash
-docker run -d --name web-vol -p 8082:80 \
-  -v datos_web:/usr/share/nginx/html \
+echo "<h2>Actualizado en vivo desde el host</h2>" > html/index.html
+```
+
+**Actualiza el navegador y verás el cambio al instante.**
+
+> Esto demuestra que el contenedor lee directamente del host, sin necesidad de reconstruir la imagen.
+
+### **F. Validar dentro del contenedor**
+
+```bash
+docker exec web-bind cat /usr/share/nginx/html/index.html
+```
+
+**Salida esperada:**
+```html
+<h2>Actualizado en vivo desde el host</h2>
+```
+
+> **💡 Concepto clave:** "El contenedor ve los mismos archivos que existen en mi máquina local."
+
+### **G. Destruir y volver a crear**
+
+**1️⃣ Eliminar el contenedor actual:**
+```bash
+docker rm -f web-bind
+```
+
+**2️⃣ Crear uno nuevo con el mismo bind mount:**
+```bash
+docker run -d --name web-bind2 -p 8082:80 \
+  -v "$(pwd)/html:/usr/share/nginx/html" \
   penta-nginx:1.0
 ```
 
-**Escribir un archivo dentro del volumen (desde el contenedor):**
-```bash
-docker exec web-vol sh -c \
-  "echo '<h1>Archivo persistente</h1>' > /usr/share/nginx/html/persistente.html"
-```
+**3️⃣ Validar:**
+👉 http://localhost:8082
 
-### **D. Probar la persistencia (volumen nombrado)**
+**El contenido sigue intacto ✅**
 
-**Eliminar el contenedor:**
-```bash
-docker rm -f web-vol
-```
+> **💡 Concepto clave:** "Aunque destruí el contenedor, los archivos permanecieron. Eso es persistencia mediante bind mount."
 
-**Levantar otro contenedor con el mismo volumen:**
-```bash
-docker run -d --name web-vol2 -p 8082:80 \
-  -v datos_web:/usr/share/nginx/html \
-  penta-nginx:1.0
-```
-
-## 📝 6) Explicación de cada paso
-
-- **Build**: se crea una imagen que incluye un `index.html` inicial
-- **Bind mount**: el contenido que ve Nginx es el de tu carpeta `html/` del host. Cambios locales se reflejan al refrescar
-- **Volumen nombrado**: Docker guarda los archivos en un path administrado. Al recrear el contenedor, los archivos siguen disponibles porque viven en el volumen, no en el contenedor
-
-## ✅ 7) Verificación / Validación
-
-### **Bind mount**
-- Abrir http://localhost:8081 → debe verse "Contenido del host"
-- Editar `html/index.html` y refrescar el navegador → el cambio aparece sin reconstruir
-
-### **Volumen nombrado**
-- Abrir http://localhost:8082/persistente.html → debe verse "Archivo persistente"
-
-**Inspeccionar el volumen:**
-```bash
-docker volume inspect datos_web
-```
-
-**Confirmar que el contenedor nuevo ve el mismo archivo:**
-```bash
-docker exec web-vol2 ls -l /usr/share/nginx/html
-```
-
-## 🚨 8) Problemas comunes y solución
-
-| Síntoma | Causa probable | Solución |
-|---------|----------------|----------|
-| No se ven cambios del bind mount | Ruta incorrecta o relativa | Usa ruta absoluta (`$(pwd)` en macOS/Linux, `${PWD}` en PowerShell) |
-| 403/404 al acceder | Archivo no existe o permisos | Verifica archivo en la ruta montada; revisa `docker exec web-bind ls /usr/share/nginx/html` |
-| Puerto ya en uso | Otro proceso escucha en 8081/8082 | Cambia a `-p 8085:80` o libera el puerto |
-| En Linux con SELinux | Políticas de SELinux bloquean acceso | Añade `:z` o `:Z` al volumen del bind mount: `-v "$(pwd)/html:/usr/share/nginx/html:Z"` (según distro) |
-| "permission denied" al escribir en volumen | Usuario sin permisos | En Alpine/Nginx ocasional; escribe desde `docker exec` como root o ajusta permisos con `chown -R nginx:nginx` |
-
-## 🧹 9) Limpieza
+### **H. Limpieza**
 
 ```bash
-docker rm -f web-bind web-vol2 2>/dev/null || true
-docker volume rm datos_web 2>/dev/null || true
+docker rm -f web-bind2
+rm -rf html
 ```
 
-**Si quieres limpiar más:**
-```bash
-docker system prune -f
-docker volume prune -f
-```
+---
 
-## 💡 10) Consideraciones de costo, seguridad y buenas prácticas
+## ⚡ Problemas comunes
 
-### **💰 Costo**
-- En local no hay costo; en nube los volúmenes persistentes cobran por GB/mes
-- Evita guardar binarios grandes en el contenedor
+| Error | Causa probable | Solución |
+|-------|----------------|----------|
+| **403 Forbidden** | Permisos de la carpeta local | `chmod -R 755 html` (Linux/macOS) |
+| **File not found** | Ruta mal definida en `-v` | Usa `$(pwd)` o `${PWD}` según el shell |
+| **Puerto ocupado** | Otro contenedor sigue activo | `docker ps`, luego `docker rm -f <id>` |
 
-### **🔒 Seguridad**
-- En producción, monta volúmenes en rutas mínimas y con permisos de usuario no root
-- Evita exponer directorios sensibles del host
+---
 
-### **✅ Buenas prácticas**
-- **Para desarrollo**: el bind mount acelera el ciclo de edición
-- **Para ambientes controlados**: un volumen nombrado evita dependencia del path del host
-- **Incluye** `.dockerignore` para reducir contexto de build
-- **Documenta** puertos y rutas montadas en un README de la app
+## 🎓 Conceptos clave aprendidos
 
-## 🖥️ Alternativa GUI (Docker Desktop)
-
-1. **Volumes** → Create → `datos_web`
-2. **Containers** → Run `penta-nginx:1.0` → Mount → Attach volumen `datos_web` en `/usr/share/nginx/html`
-3. **Exec** → crea `persistente.html` y valida en http://localhost:8082/persistente.html
+- ✅ **Bind mounts** permiten compartir carpetas del host con el contenedor
+- ✅ Los cambios en el host se reflejan **inmediatamente** en el contenedor
+- ✅ Los datos persisten aunque el contenedor se destruya
+- ✅ Ideal para **desarrollo local** y **pruebas rápidas**
