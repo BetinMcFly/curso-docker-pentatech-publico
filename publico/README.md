@@ -39,7 +39,10 @@ curso-docker-pentatech/
 ├── dia3-volumenes-redes-compose/        # Volúmenes y orquestación con Compose
 │   ├── 01-volumen-persistente-nginx/
 │   ├── 02-mysql-adminer-red/
-│   ├── 03-postgres-pgadmin-compose/
+│   ├── 06-wordpress-compose/
+│   ├── mysql-adminer-red/
+│   ├── red-manual-nginx-flask/
+│   ├── volumen-persistente-nginx/
 │   └── README.md
 ├── dia4-optimizacion-seguridad/         # Buenas prácticas y seguridad
 │   ├── 01-multi-stage-build/
@@ -47,6 +50,11 @@ curso-docker-pentatech/
 │   ├── 03-user-noroot/
 │   └── README.md
 ├── dia5-gcp/                           # Docker en la nube (Cloud Run y GKE)
+│   ├── 01-cloud-run/
+│   ├── 02-gke/
+│   └── README.md
+├── cheatsheet-docker.md                # Comandos útiles de Docker
+├── FAQ.md                             # Preguntas frecuentes
 └── README.md                           # Este archivo
 ```
 
@@ -68,7 +76,6 @@ curso-docker-pentatech/
 
 ## 📑 Material de apoyo
 
-- [Slides del curso (PDF)](./slides/Curso-Docker.pdf)  
 - [Cheat sheet de comandos Docker](./cheatsheet-docker.md)
 
 ---
