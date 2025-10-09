@@ -7,11 +7,11 @@ El objetivo es que cualquier participante pueda **explorar los ejemplos**, revis
 
 ## 📅 Agenda del curso
 
-- **[Día 1: Fundamentos y primeros contenedores](./dia1-fundamentos/)**  
-- **[Día 2: Creación de imágenes y Dockerfiles](./dia2-imagenes/)**  
-- **[Día 3: Volúmenes, redes y Docker Compose](./dia3-volumenes-redes-compose/)**  
-- **[Día 4: Optimización y seguridad en contenedores](./dia4-optimizacion-seguridad/)**  
-- **[Día 5: Docker en la nube con GCP (Cloud Run y GKE)](./dia5-gcp/)**  
+- **[Día 1: Fundamentos y primeros contenedores](./dia1-fundamentos/README.md)**  
+- **[Día 2: Creación de imágenes y Dockerfiles](./dia2-imagenes/README.md)**  
+- **[Día 3: Volúmenes, redes y Docker Compose](./dia3-volumenes-redes-compose/README.md)**  
+- **[Día 4: Optimización y seguridad en contenedores](./dia4-optimizacion-seguridad/README.md)**  
+- **[Día 5: Docker en la nube con GCP (Cloud Run y GKE)](./dia5-gcp/README.md)**  
 
 ---
 
